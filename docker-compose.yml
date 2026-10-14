@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: uber-coroata-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: uber_coroata
+      POSTGRES_USER: uber_coroata
+      POSTGRES_PASSWORD: uber_coroata_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - uber_coroata_postgres_data:/var/lib/postgresql/data
+      - ./backend/database/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uber_coroata -d uber_coroata"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  uber_coroata_postgres_data:
