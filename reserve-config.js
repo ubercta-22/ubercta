@@ -1,7 +1,6 @@
 /*
- * Configuração pública do frontend. apiBaseUrl precisa apontar para a raiz /api
- * do backend; não coloque segredos aqui. Se o backend estiver em outro domínio,
- * use a URL HTTPS pública, por exemplo: https://api.seudominio.com/api
+ * Configuração pública do frontend. apiBaseUrl aponta para a raiz /api
+ * do backend; não coloque segredos aqui.
  */
 window.UBER_COROATA_CONFIG = window.UBER_COROATA_CONFIG || {};
 (() => {
@@ -13,8 +12,10 @@ window.UBER_COROATA_CONFIG = window.UBER_COROATA_CONFIG || {};
     : (port === '4173' || (localHosts.has(hostname) && port !== '8787'))
       ? `${protocol}//${hostname}:8787/api`
       : `${origin}/api`;
+  const productionApi = 'https://uber-coroata-api.onrender.com/api';
+  const isLocal = protocol === 'file:' || localHosts.has(hostname) || port === '4173';
 
-  config.apiBaseUrl = String(config.apiBaseUrl || localApi).trim().replace(/\/+$/, '');
+  config.apiBaseUrl = String(config.apiBaseUrl || (isLocal ? localApi : productionApi)).trim().replace(/\/+$/, '');
   config.reserveApiUrl = config.reserveApiUrl || `${config.apiBaseUrl}/reservations`;
   config.reserveRules = Object.assign({
     minimumAdvanceMinutes: 60,
